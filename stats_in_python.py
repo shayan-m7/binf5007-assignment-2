@@ -12,7 +12,7 @@ def load_data(filepath:str, column:int)->tuple[list, int]:
             for line in infile: 
                 line_num += 1
                 total_count += 1
-                line = line.strip()
+                line = line.strip("\r\n")
                 if not line: 
                     total_count -= 1    #not counting empty lines in row count
                     continue
@@ -69,11 +69,42 @@ def calculate_median(number:list)->float:
     n = len(sorted_numbers)
     mid = n // 2
     if n % 2 == 0: 
-        return (sorted_numbers[mid - 1] + sorted_numbers[mid]) / 2
+        return float((sorted_numbers[mid - 1] + sorted_numbers[mid]) / 2)
     else: 
-        return sorted_numbers[mid]
+        return float(sorted_numbers[mid])
 
 
 #MAIN---------------------------------------------------------------------------------------------------
 
+if __name__ == "__main__": 
+    
+    filepath = input("Enter file path: ").strip()
+
+    try: 
+        column = int(input("Enter column number: ").strip())
+    except ValueError: 
+        print("Error: Column number must be an integer")
+        sys.exit(1)
+
+    numbers, total_count = load_data(filepath, column)
+
+    if len(numbers) == 0: 
+        print(f"Error: There are no valid numbers in column {column} in file: {filepath}")
+        sys.exit(1)
+
+    avg = calculate_average(numbers)
+    maximum, minimum = get_max_and_min(numbers)
+    variance = calculate_variance(numbers)
+    std_dev = calculate_std_dev(numbers)
+    median = calculate_median(numbers)
+
+    print(f"Column: {column}")
+    print(f"Count = {float(total_count):.3f}")
+    print(f"ValidNum = {float(len(numbers)):.3f}")
+    print(f"Average = {avg:.3f}")
+    print(f"Maximum = {maximum:.3f}")
+    print(f"Minimum = {minimum:.3f}")
+    print(f"Variance = {variance:.3f}")
+    print(f"Std Dev = {std_dev:.3f}")
+    print(f"Median = {median:.3f}")
 
